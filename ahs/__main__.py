@@ -95,8 +95,9 @@ def main() -> None:
     if args.output is not None:
         output_file:Path = args.output
         output_file.parent.mkdir(exist_ok=True, parents=True)
-        output_file.write_text(json.dumps(output_data, indent=2))
-
+        output_file.write_text(json.dumps(output_data))
+    else:
+        print(output_data)
 
 if __name__ == "__main__":
     main()
