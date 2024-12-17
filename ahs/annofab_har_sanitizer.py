@@ -8,7 +8,24 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 STR_REDACTED = "REDACTED"
 """編集済を表す文字列"""
 
-SENSITIVE_KEYS = {"X-Amz-Credential", "X-Amz-Signature", "X-Amz-Security-Token"}
+SENSITIVE_QUERY_STRING_KEYS = {"X-Amz-Credential", "X-Amz-Signature", "X-Amz-Security-Token"}
+
+SENSITIVE_REQUEST_HEADER_KEYS = {"authorization", "cookie"}
+"""
+マスク対象のリクエストヘッダのキー
+
+Notes:
+    小文字で比較するため、小文字で定義すること。
+"""
+
+
+SENSITIVE_RESPONSE_HEADER_KEYS = {"set-cookie"}
+"""
+マスク対象のリクエストヘッダのキー
+
+Notes:
+    小文字で比較するため、小文字で定義すること。
+"""
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -51,12 +68,18 @@ def mask_query_string(url: str, masked_keys: Collection[str]) -> str:
 def sanitize_response(response: dict[str, Any]) -> dict[str, Any]:
     response["content"]["text"] = STR_REDACTED
     response["cookies"] = []
+
+    headers = response["headers"]
+    for header in headers:
+        if header["name"].lower() in SENSITIVE_RESPONSE_HEADER_KEYS:
+            header["value"] = STR_REDACTED
+
     return response
 
 
 def sanitize_initiator(initiator: dict[str, Any]) -> dict[str, Any]:
     if "url" in initiator:
-        initiator["url"] = mask_query_string(initiator["url"], SENSITIVE_KEYS)
+        initiator["url"] = mask_query_string(initiator["url"], SENSITIVE_QUERY_STRING_KEYS)
     return initiator
 
 
@@ -67,22 +90,22 @@ def sanitize_request(request: dict[str, Any]) -> dict[str, Any]:
     headers = request["headers"]
 
     for header in headers:
-        if header["name"] == "Authorization":
+        if header["name"].lower() in SENSITIVE_REQUEST_HEADER_KEYS:
             header["value"] = STR_REDACTED
 
     query_string_list = request["queryString"]
     for qs in query_string_list:
-        if qs["name"] in SENSITIVE_KEYS:
+        if qs["name"] in SENSITIVE_QUERY_STRING_KEYS:
             qs["value"] = STR_REDACTED
 
     url = request["url"]
-    request["url"] = mask_query_string(url, SENSITIVE_KEYS)
+    request["url"] = mask_query_string(url, SENSITIVE_QUERY_STRING_KEYS)
     return request
 
 
 def sanitize_har_object(data: dict[str, Any]) -> dict[str, Any]:
     for entry in data["log"]["entries"]:
-        if "_initiator" not in entry:
+        if "_initiator" in entry:
             entry["_initiator"] = sanitize_initiator(entry["_initiator"])
         entry["request"] = sanitize_request(entry["request"])
         entry["response"] = sanitize_response(entry["response"])

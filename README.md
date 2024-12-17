@@ -24,4 +24,14 @@ HARファイルに含まれる以下の情報をマスクします。
 * `X-Amz-Security-Token`
 
 
-    
+# Requirements
+* Python 3.10 以上
+
+
+# Usage
+
+```
+$ python ahs/annofab_har_sanitizer.py input.har --output output.har
+```
+
+
