@@ -1,0 +1,62 @@
+target-version = "py310"
+line-length = 150
+
+[lint]
+ignore = [
+    "G004", # `logging-f-string` : loggingでf-stringを使いたいので無視する
+    "RUF001", # 全角記号など`ambiguous unicode character`も使いたいため
+    "RUF002",# 全角記号など`ambiguous unicode character`も使いたいため
+    "RUF003",# 全角記号など`ambiguous unicode character`も使いたいため
+    "PLC1901", # compare-to-empty-string : `if a == "`のように空文字列で直接比較したいときがあるため
+    "PLR2004", # magic-value-comparison: listのサイズで判定するときがよくあるため
+    "ERA", # : 役立つこともあるが、コメントアウトしていないコードも警告されるので無視する
+    "PERF203", # try-except-in-loop: ループ内でtry-exceptを使うこともあるため無視する。またPython3.11以降ｈ
+    "FIX", # TODOやFIXMEを使うため無視する
+    "TD", # TODOコメントの書き方に気にしていないので無視する
+
+    # 以下のルールはプロジェクトに合っていないので無効化した
+    "RSE", # flake8-raise
+    "D", # pydocstyle, Docstringを中途半端にしか書いていないので、除外する
+    "C90", # mccabe
+    "SLF", #  flake8-self
+    "BLE", # flake8-blind-except
+    "FBT", # flake8-boolean-trap
+    "TRY", # tryceratops
+    "COM", # flake8-commas
+    "S", # flake8-bandit
+    "EM",#flake8-errmsg
+    "EXE", # flake8-executable
+    "ICN", # flake8-import-conventions
+    "RET",#flake8-return
+    "SIM",#flake8-simplify
+    "TCH", # flake8-type-checking
+    "ISC", #flake8-implicit-str-concat
+    "PT", # flake8-pytest-style
+]
+
+select = [
+    "ALL"
+]
+
+
+[lint.per-file-ignores]
+# テストコードはチェックを緩和する
+"tests/**.py" = [
+    "PGH",  # pygrep-hooks
+    "DTZ",  # flake8-datetimez
+    "ANN",  # flake8-annotations
+    "E501",  # line-too-long
+    "RUF100",  # unused-noqa
+    "SIM", # flake8-simplify
+    "N", # pep8-naming
+    "PTH", # flake8-use-pathlib
+    "SLF", # flake8-self
+    "PLC2401", # non-ascii-name: メソッド名に日本語を使うため
+]
+
+[lint.pydocstyle]
+convention = "google"
+
+
+[lint.pylint]
+max-args = 10
