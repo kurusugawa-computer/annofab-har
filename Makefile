@@ -16,3 +16,6 @@ lint:
 	poetry run ruff check ${SOURCE_FILES} ${TEST_FILES}
 	poetry run mypy ${SOURCE_FILES} ${TEST_FILES}
 
+
+test:
+	poetry run pytest ${TEST_FILES}

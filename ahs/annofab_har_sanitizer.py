@@ -78,8 +78,22 @@ def sanitize_response(response: dict[str, Any]) -> dict[str, Any]:
 
 
 def sanitize_initiator(initiator: dict[str, Any]) -> dict[str, Any]:
-    if "url" in initiator:
-        initiator["url"] = mask_query_string(initiator["url"], SENSITIVE_QUERY_STRING_KEYS)
+    """
+    キー`url`に対応する値をマスクする。
+    "_initiator"は標準仕様にはないので、再帰的にアクセスして処理する。
+
+    """
+    for key, value in initiator.items():
+        if isinstance(value, dict):
+            initiator[key] = sanitize_initiator(value)
+        elif isinstance(value, list):
+            for index, item in enumerate(value):
+                if isinstance(item, dict):
+                    value[index] = sanitize_initiator(item)
+        elif isinstance(value, str):
+            if key == "url":
+                initiator[key] = mask_query_string(initiator["url"], SENSITIVE_QUERY_STRING_KEYS)
+
     return initiator
 
 
