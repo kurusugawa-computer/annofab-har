@@ -130,13 +130,13 @@ def main() -> None:
     parser = create_parser()
     args = parser.parse_args()
 
-    input_data = json.loads(args.har_file.read_text())
+    input_data = json.loads(args.har_file.read_text(encoding="utf-8"))
     output_data = sanitize_har_object(input_data)
     output_string = json.dumps(output_data, ensure_ascii=False)
     if args.output is not None:
         output_file: Path = args.output
         output_file.parent.mkdir(exist_ok=True, parents=True)
-        output_file.write_text(output_string)
+        output_file.write_text(output_string, encoding="utf-8")
     else:
         print(output_string)  # noqa: T201
 
