@@ -50,10 +50,11 @@ def minimize_entry(entry: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def match_entry(entry: dict[str, Any], is_s3_path) -> bool:
+def match_entry(entry: dict[str, Any], is_s3_path: bool) -> bool:
     if is_s3_path:
         url = entry["request"]["url"]
         return re.search("https://.*amazonaws\\.com/", url) is not None
+    return True
 
 
 def create_dataframe_from_har_object(data: dict[str, Any], *, is_s3_path: bool) -> pandas.DataFrame:
@@ -87,7 +88,8 @@ def main() -> None:
     args = parser.parse_args()
 
     if len(args.har_file) == 1:
-        input_data = json.loads(args.har_file.read_text(encoding="utf-8"))
+        har_file: Path = args.har_file[0]
+        input_data = json.loads(har_file.read_text(encoding="utf-8"))
         df_har = create_dataframe_from_har_object(input_data, is_s3_path=args.only_s3_path)
     else:
         df_har_list = []
