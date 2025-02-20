@@ -23,6 +23,13 @@ def _minimize_request(request: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
+def get_content_length(headers: list[dict[str, Any]]) -> int | None:
+    for header in headers:
+        if header["name"].lower() == "content-length":
+            return int(header["value"])
+    return None
+
+
 def _minimize_response(response: dict[str, Any]) -> dict[str, Any]:
     result = {}
     for key in ("status",):
@@ -33,7 +40,7 @@ def _minimize_response(response: dict[str, Any]) -> dict[str, Any]:
         "size": content["size"],
         "mimeType": content["mimeType"],
     }
-
+    result["headers"] = {"contentLength": get_content_length(response["headers"])}
     return result
 
 
@@ -71,6 +78,7 @@ def create_dataframe_from_har_object(data: dict[str, Any], *, is_s3_path: bool) 
         "response.status",
         "response.content.size",
         "response.content.mimeType",
+        "response.headers.contentLength",
         "time",
         "timings.blocked",
         "timings.dns",
