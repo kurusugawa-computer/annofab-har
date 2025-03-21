@@ -31,7 +31,7 @@ HARファイルに含まれる以下の情報をマスクします。
 # Usage
 
 ```
-$ python ahs/annofab_har_sanitizer.py input.har --output output.har
+$ poetry run annofab_har sanitize input.har --output output.har
 ```
 
 
