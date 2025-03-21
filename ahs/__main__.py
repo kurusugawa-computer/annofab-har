@@ -1,10 +1,11 @@
 import argparse
 import sys
+import traceback
 
 import ahs
+import ahs.editor_loadtime
 import ahs.sanitize_har
 import ahs.to_timing_csv
-import ahs.editor_loadtime
 
 
 def create_parser() -> argparse.ArgumentParser:
@@ -32,6 +33,7 @@ def main(arguments: list[str] | None = None) -> None:
         try:
             args.func(args)
         except Exception:
+            traceback.print_exc()
             # エラーで終了するためExit Codeを1にする
             sys.exit(1)
 
