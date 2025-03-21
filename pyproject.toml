@@ -1,5 +1,15 @@
 [tool.poetry]
-package-mode = false
+name = "annofab_har"
+version = "0.1.0" 
+description = ""
+authors = ["Kurusugawa Computer Inc."]
+license = "MIT"
+readme="README.md"
+repository="https://github.com/kurusugawa-computer/annofab-har-sanitizer"
+
+packages = [
+    { include = "ahs" }
+]
 
 
 [tool.poetry.dependencies]
@@ -14,7 +24,8 @@ mypy = "*"
 [tool.poetry.group.test.dependencies]
 pytest = "*"
 
-
+[tool.poetry.scripts]
+annofab_har = "ahs.__main__:main"
 
 
 [build-system]

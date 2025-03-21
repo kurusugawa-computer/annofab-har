@@ -1,5 +1,6 @@
 import argparse
 import json
+from argparse import Namespace
 from collections.abc import Collection
 from pathlib import Path
 from typing import Any
@@ -26,14 +27,6 @@ SENSITIVE_RESPONSE_HEADER_KEYS = {"set-cookie"}
 Notes:
     小文字で比較するため、小文字で定義すること。
 """
-
-
-def create_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Annofabに関するHAR(Http Archive)ファイルから機密情報をマスクします。")
-
-    parser.add_argument("har_file", type=Path)
-    parser.add_argument("-o", "--output", type=Path, help="出力先。未指定ならば標準出力に出力します。")
-    return parser
 
 
 def mask_query_string(url: str, masked_keys: Collection[str]) -> str:
@@ -126,10 +119,7 @@ def sanitize_har_object(data: dict[str, Any]) -> dict[str, Any]:
     return data
 
 
-def main() -> None:
-    parser = create_parser()
-    args = parser.parse_args()
-
+def main(args: Namespace) -> None:
     input_data = json.loads(args.har_file.read_text(encoding="utf-8"))
     output_data = sanitize_har_object(input_data)
     output_string = json.dumps(output_data, ensure_ascii=False)
@@ -141,5 +131,14 @@ def main() -> None:
         print(output_string)  # noqa: T201
 
 
-if __name__ == "__main__":
-    main()
+def add_parser(subparsers: argparse._SubParsersAction) -> argparse.ArgumentParser:
+    subcommand_name = "sanitize"
+    subcommand_help = "Annofabに関するHAR(Http Archive)ファイルから機密情報をマスクします。"
+
+    parser = subparsers.add_parser(subcommand_name, description=subcommand_help, help=subcommand_help)
+    parser.set_defaults(func=main)
+
+    parser.add_argument("har_file", type=Path)
+    parser.add_argument("-o", "--output", type=Path, help="出力先。未指定ならば標準出力に出力します。")
+
+    return parser
