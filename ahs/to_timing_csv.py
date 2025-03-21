@@ -8,14 +8,6 @@ from typing import Any
 import pandas
 
 
-def create_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="HARファイルからtimingに関する情報をCSVとして出力します。")
-    parser.add_argument("har_file", type=Path, nargs="+", help="HARファイルのパス。")
-    parser.add_argument("-o", "--output", type=Path, help="出力先。未指定ならば標準出力に出力します。")
-    parser.add_argument("--only_s3_path", action="store_true", help="AWS S3へアクセスしているリクエストのみを抽出します。")
-    return parser
-
-
 def _minimize_request(request: dict[str, Any]) -> dict[str, Any]:
     result = {}
     for key in ("method", "url"):
@@ -91,10 +83,7 @@ def create_dataframe_from_har_object(data: dict[str, Any], *, is_s3_path: bool) 
     return df_har[columns]
 
 
-def main() -> None:
-    parser = create_parser()
-    args = parser.parse_args()
-
+def main(args: argparse.Namespace) -> None:
     if len(args.har_file) == 1:
         har_file: Path = args.har_file[0]
         input_data = json.loads(har_file.read_text(encoding="utf-8"))
@@ -116,5 +105,15 @@ def main() -> None:
         df_har.to_csv(sys.stdout, index=False, encoding="utf-8")
 
 
-if __name__ == "__main__":
-    main()
+def add_parser(subparsers: argparse._SubParsersAction) -> argparse.ArgumentParser:
+    subcommand_name = "to_timing_csv"
+    subcommand_help = "HARファイルからtimingに関する情報をCSVとして出力します。"
+
+    parser = subparsers.add_parser(subcommand_name, description=subcommand_help, help=subcommand_help)
+    parser.set_defaults(func=main)
+
+    parser.add_argument("har_file", type=Path, nargs="+", help="HARファイルのパス。")
+    parser.add_argument("-o", "--output", type=Path, help="出力先。未指定ならば標準出力に出力します。")
+    parser.add_argument("--only_s3_path", action="store_true", help="AWS S3へアクセスしているリクエストのみを抽出します。")
+
+    return parser

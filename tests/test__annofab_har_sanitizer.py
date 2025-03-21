@@ -1,4 +1,4 @@
-from ahs.annofab_har_sanitizer import sanitize_initiator
+from ahs.sanitize_har import sanitize_initiator
 
 
 def test__sanitize_initiator():
