@@ -29,7 +29,7 @@ Notes:
 """
 
 
-def mask_query_string(url: str, masked_keys: Collection[str]) -> str:
+def mask_query_string_in_url(url: str, masked_keys: Collection[str]) -> str:
     """
     URLのQuery Stringに含まれるセンシティブな値をマスクする
 
@@ -85,9 +85,16 @@ def sanitize_initiator(initiator: dict[str, Any]) -> dict[str, Any]:
                     value[index] = sanitize_initiator(item)
         elif isinstance(value, str):
             if key == "url":
-                initiator[key] = mask_query_string(initiator["url"], SENSITIVE_QUERY_STRING_KEYS)
+                initiator[key] = mask_query_string_in_url(initiator["url"], SENSITIVE_QUERY_STRING_KEYS)
 
     return initiator
+
+
+def sanitize_url(url: str) -> str:
+    """
+    URLのQuery Stringに含まれるセンシティブな値をマスクする
+    """
+    return mask_query_string_in_url(url, SENSITIVE_QUERY_STRING_KEYS)
 
 
 def sanitize_request(request: dict[str, Any]) -> dict[str, Any]:
@@ -105,8 +112,7 @@ def sanitize_request(request: dict[str, Any]) -> dict[str, Any]:
         if qs["name"] in SENSITIVE_QUERY_STRING_KEYS:
             qs["value"] = STR_REDACTED
 
-    url = request["url"]
-    request["url"] = mask_query_string(url, SENSITIVE_QUERY_STRING_KEYS)
+    request["url"] = sanitize_url(request["url"])
     return request
 
 

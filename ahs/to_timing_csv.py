@@ -7,6 +7,8 @@ from typing import Any
 
 import pandas
 
+from ahs.sanitize_har import sanitize_url
+
 
 def _minimize_request(request: dict[str, Any]) -> dict[str, Any]:
     result = {}
@@ -97,6 +99,9 @@ def main(args: argparse.Namespace) -> None:
             df_har_list.append(df_sub_har)
         df_har = pandas.concat(df_har_list, ignore_index=True)
 
+    if args.sanitize_url:
+        df_har["request.url"] = df_har["request.url"].apply(sanitize_url)
+
     if args.output is not None:
         output_file: Path = args.output
         output_file.parent.mkdir(exist_ok=True, parents=True)
@@ -115,5 +120,6 @@ def add_parser(subparsers: argparse._SubParsersAction) -> argparse.ArgumentParse
     parser.add_argument("har_file", type=Path, nargs="+", help="HARファイルのパス。")
     parser.add_argument("-o", "--output", type=Path, help="出力先。未指定ならば標準出力に出力します。")
     parser.add_argument("--only_s3_path", action="store_true", help="AWS S3へアクセスしているリクエストのみを抽出します。")
+    parser.add_argument("--sanitize_url", action="store_true", help="URLのQuery Stringに含まれるセンシティブな値をマスクします。")
 
     return parser
