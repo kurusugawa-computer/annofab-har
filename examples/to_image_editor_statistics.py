@@ -7,7 +7,7 @@ import pandas
 
 
 def create_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="foo")
+    parser = argparse.ArgumentParser(description="画像エディタのHARファイルから、フレームの読み込み時間などの統計情報を出力します。")
     parser.add_argument(
         "csv_path",
         type=Path,
