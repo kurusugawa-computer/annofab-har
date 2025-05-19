@@ -19,7 +19,7 @@ pandas = "*"
 [tool.poetry.group.linter.dependencies]
 ruff = "*"
 mypy = "*"
-
+types-python-dateutil = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
