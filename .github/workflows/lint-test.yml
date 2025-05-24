@@ -30,7 +30,7 @@ jobs:
         run: uv sync --only-group test
       - name: Test
         run: |
-            uv run pytest -n auto -m "not access_webapi"
+            make test
           
   lint:
     runs-on: ubuntu-latest
