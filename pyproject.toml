@@ -1,33 +1,39 @@
-[tool.poetry]
+[project]
 name = "annofab_har"
-version = "0.1.0" 
+version = "0.1.0"
 description = ""
-authors = ["Kurusugawa Computer Inc."]
+authors = [{ name = "Kurusugawa Computer Inc." }]
+requires-python = "~=3.10"
+readme = "README.md"
 license = "MIT"
-readme="README.md"
-repository="https://github.com/kurusugawa-computer/annofab-har"
+dependencies = ["pandas"]
 
-packages = [
-    { include = "ahs" }
-]
+[project.urls]
+Repository = "https://github.com/kurusugawa-computer/annofab-har"
 
-
-[tool.poetry.dependencies]
-python = "^3.10"
-pandas = "*"
-
-[tool.poetry.group.linter.dependencies]
-ruff = "*"
-mypy = "*"
-types-python-dateutil = "*"
-
-[tool.poetry.group.test.dependencies]
-pytest = "*"
-
-[tool.poetry.scripts]
+[project.scripts]
 annofab_har = "ahs.__main__:main"
 
+[dependency-groups]
+linter = [
+    "ruff",
+    "mypy",
+    "types-python-dateutil",
+]
+test = ["pytest"]
+
+[tool.uv]
+default-groups = [
+    "linter",
+    "test",
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["ahs"]
+
+[tool.hatch.build.targets.wheel]
+include = ["ahs"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
