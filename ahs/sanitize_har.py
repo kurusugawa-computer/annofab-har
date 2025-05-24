@@ -139,7 +139,7 @@ def main(args: Namespace) -> None:
 
 def add_parser(subparsers: argparse._SubParsersAction) -> argparse.ArgumentParser:
     subcommand_name = "sanitize"
-    subcommand_help = "Annofabに関するHAR(Http Archive)ファイルから機密情報をマスクします。"
+    subcommand_help = "AnnofabのHARファイルから機密情報をマスクします。"
 
     parser = subparsers.add_parser(subcommand_name, description=subcommand_help, help=subcommand_help)
     parser.set_defaults(func=main)
