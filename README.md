@@ -1,7 +1,14 @@
-# annofab-har-sanitizer
-Annofabに関するHAR(Http Archive)ファイルから機密情報をマスクします。
+# annofab-har
+AnnofabのHAR(Http Archive)ファイルを扱うコマンドです。
 
-# マスク対象
+# Requirements
+* Python 3.10 以上
+
+
+# `annofab_har sanitize`
+AnnofabのHARファイルから機密情報をマスクします。
+
+## マスク対象
 HARファイルに含まれる以下の情報をマスクします。
 
 * `response`
@@ -24,14 +31,39 @@ HARファイルに含まれる以下の情報をマスクします。
 * `X-Amz-Security-Token`
 
 
-# Requirements
-* Python 3.10 以上
 
-
-# Usage
+## Usage
 
 ```
 $ poetry run annofab_har sanitize input.har --output output.har
 ```
 
 
+# `annofab_har to_timing_csv`
+
+HARファイルからtimingに関する情報をCSVとして出力します。
+
+## CSVの列名
+
+ * startedDateTime
+ * request.method
+ * request.url
+ * response.status
+ * response.content.size
+ * response.content.mimeType
+ * response.headers.contentLength
+ * time
+ * timings.blocked
+ * timings.dns
+ * timings.connect
+ * timings.send
+ * timings.wait
+ * timings.receive
+ * timings.ssl
+
+
+## Usage
+
+```
+$ poetry run annofab_har to_timing_csv input.har --output output.csv
+```
