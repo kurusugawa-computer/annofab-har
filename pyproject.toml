@@ -1,12 +1,24 @@
 [project]
 name = "annofab_har"
-version = "0.1.0"
+dynamic = ["version"]
 description = ""
 authors = [{ name = "Kurusugawa Computer Inc." }]
-requires-python = "~=3.10"
+requires-python = ">=3.10"
 readme = "README.md"
 license = "MIT"
 dependencies = ["pandas"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Environment :: Console",
+    "Topic :: Utilities",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13"
+]
+
 
 [project.urls]
 Repository = "https://github.com/kurusugawa-computer/annofab-har"
@@ -34,6 +46,13 @@ include = ["ahs"]
 [tool.hatch.build.targets.wheel]
 include = ["ahs"]
 
+
+
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
+
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+

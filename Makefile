@@ -6,13 +6,13 @@ endif
 .PHONY: docs lint test format
 
 format:
-	poetry run ruff format ${FILES}
-	poetry run ruff check --fix-only --exit-zero ${FILES}
+	uv run ruff format ${FILES}
+	uv run ruff check --fix-only --exit-zero ${FILES}
 
 lint:
-	poetry run ruff check ${FILES}
-	poetry run mypy ${FILES}
+	uv run ruff check ${FILES}
+	uv run mypy ${FILES}
 
 
 test:
-	poetry run pytest tests
+	uv run pytest tests
