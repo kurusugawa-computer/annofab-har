@@ -1,5 +1,8 @@
 # annofab-har
-AnnofabのHAR(Http Archive)ファイルを扱うコマンドです。
+AnnofabのHAR(Http Archive)ファイルを扱うCLIです。
+
+[![PyPI version](https://badge.fury.io/py/annofab-har.svg)](https://badge.fury.io/py/annofab-har)
+[![Python Versions](https://img.shields.io/pypi/pyversions/annofab-har.svg)](https://pypi.org/project/annofab-har/)
 
 # Requirements
 * Python 3.10 以上

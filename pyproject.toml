@@ -1,5 +1,5 @@
 [project]
-name = "annofab_har"
+name = "annofab-har"
 dynamic = ["version"]
 description = ""
 authors = [{ name = "Kurusugawa Computer Inc." }]
