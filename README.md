@@ -7,6 +7,11 @@ AnnofabのHAR(Http Archive)ファイルを扱うCLIです。
 # Requirements
 * Python 3.10 以上
 
+# Install
+
+```
+$ pip install annofab-har
+```
 
 # `annofab_har sanitize`
 AnnofabのHARファイルから機密情報をマスクします。
@@ -38,7 +43,7 @@ HARファイルに含まれる以下の情報をマスクします。
 ## Usage
 
 ```
-$ uv run annofab_har sanitize input.har --output output.har
+$ annofab_har sanitize input.har --output output.har
 ```
 
 
@@ -68,5 +73,5 @@ HARファイルからtimingに関する情報をCSVとして出力します。
 ## Usage
 
 ```
-$ uv run annofab_har to_timing_csv input.har --output output.csv
+$ annofab_har to_timing_csv input.har --output output.csv
 ```
